@@ -17,7 +17,7 @@ async function onLogin(event){
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({email,password})
         });
-        console.log(res)
+       
         if (res.ok != true) {
             const error =await res.json();
             throw new Error(error.message);
@@ -25,7 +25,7 @@ async function onLogin(event){
         
         const data = await res.json();
 
-        console.log(data)
+       
 
         const userData = {
             email: data.email,
