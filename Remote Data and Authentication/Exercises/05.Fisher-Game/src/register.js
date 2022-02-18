@@ -1,1 +1,46 @@
-console.log('TODO:// Implement Register functionality');
+window.addEventListener('DOMContentLoaded',()=>{
+    const form = document.querySelector('form');
+    form.addEventListener('submit',onRegister);
+   });
+
+   async function onRegister(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const rePass = formData.get('rePass');
+
+    try {
+        if (password !== rePass ) {
+            throw new Error('Passwords not match');
+        }
+        
+            const res = await fetch('http://localhost:3030/users/register',{
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({email,password,rePass}),
+            });
+           
+            if (res.ok != true) {
+                const error =await res.json();
+                throw new Error(error.message);
+            }
+            
+            const data = await res.json();
+    
+           
+    
+            const userData = {
+                email: data.email,
+                id: data._id,
+                token: data.accessToken,
+            };
+    
+            sessionStorage.setItem('userData', JSON.stringify(userData));
+    
+           window.location='/';
+    } catch (error) {
+        alert(error.message)
+    }
+   }
